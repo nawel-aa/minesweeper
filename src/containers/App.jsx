@@ -47,16 +47,17 @@ import Grid from '../components/Grid';
 const App = () => {
   const [mines, setMines] = useState(10);
   const [tiles, setTiles] = useState(81);
+  const [level, setLevel] = useState('beginner');
   
   return (
     <div>
       <h1>Minesweeper</h1>
 
       {/* Level picker */}
-      <LevelPicker mines={mines} tiles={tiles} setMines={setMines} setTiles={setTiles} />
+      <LevelPicker setMines={setMines} setTiles={setTiles} level={level} setLevel={setLevel} />
 
       {/* Grid */}
-      <Grid mines={mines} tiles={tiles} setMines={setMines} setTiles={setTiles} />
+      <Grid mines={mines} tiles={tiles} />
     </div>
   );
 }
