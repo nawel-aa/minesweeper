@@ -1,53 +1,60 @@
 td.unopened {
-  background: url('img/unopened.svg');
+  background-color: #B9B9B9;
+  border-top: 3px solid #fff;
+  border-left: 3px solid #fff;
+  border-right: 3px solid #757575;
+  border-bottom: 3px solid #757575;
   cursor: pointer;
 }
 td.opened {
-  background: url('img/opened.svg');
+  border: 1px solid #757575;
+  padding: 2px;
+  background-color: #B9B9B9;
 }
 td.flagged {
-  background: url('img/flag.svg');
+  background-image: url('img/flag.svg');
 }
 td.question {
-  background: url('img/question.svg');
+  background-image: url('img/question.svg');
 }
 td.mine {
-  background: url('img/mine.png');
+  background-image: url('img/mine.png');
 }
-td.mine-neighbour-1 {
-  background: url('img/1.svg');
+/* td.mine-neighbour-1 {
+  background-image: url('img/1.svg');
 }
 td.mine-neighbour-2 {
-  background: url('img/2.svg');
+  background-image: url('img/2.svg');
 }
 td.mine-neighbour-3 {
-  background: url('img/3.svg');
+  background-image: url('img/3.svg');
 }
 td.mine-neighbour-4 {
-  background: url('img/4.svg');
+  background-image: url('img/4.svg');
 }
 td.mine-neighbour-5 {
-  background: url('img/5.svg');
+  background-image: url('img/5.svg');
 }
 td.mine-neighbour-6 {
-  background: url('img/6.svg');
+  background-image: url('img/6.svg');
 }
 td.mine-neighbour-7 {
-  background: url('img/7.svg');
+  background-image: url('img/7.svg');
 }
 td.mine-neighbour-8 {
-  background: url('img/8.svg');
+  background-image: url('img/8.svg');
+} */
+
+table {
+  border-spacing: 0;
 }
 
-/* Positioning the Minesweep table and make sure the cells are square */
-table #minesweeper {
-  margin: auto;
-  margin-top: 3em;
-  border: 1px solid #999;
-  border-collapse: collapse;
-}
-table #minesweeper td {
-  width: 24px;
-  height: 24px;
-  background-size: cover;
+table td {
+  width: 32px;
+  height: 32px;
+  vertical-align: center;
+  font-size: 24px;
+  border: none;
+  text-align: center;
+  background-size: contain;
 }

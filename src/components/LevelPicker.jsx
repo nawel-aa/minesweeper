@@ -2,28 +2,16 @@ import React, { useState } from 'react';
 
 
 const LevelPicker = (props) => {
+  // Initialize the form with the default level already checked
   const [levelChecked, setLevelChecked] = useState(props.level);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const level = event.target.value;
-    props.setLevel(level);
+    const inputs = event.target.querySelectorAll('input[name="level"]');
+    const level = Array.from(inputs).find(input => input.checked).value;
 
-    switch (level) {
-      case 'intermediate':
-        props.setMines(40);
-        props.setTiles(256);
-        break;
-      case 'expert':
-        props.setMines(99);
-        props.setTiles(480);
-        break;
-      default:
-        props.setMines(10);
-        props.setTiles(81);
-        break;
-    }
+    props.setLevel(level);
   }
 
   const handleChange = (event) => {
