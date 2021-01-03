@@ -16,11 +16,10 @@ const Grid = (props) => {
       <tbody>
         {props.grid.map((row, rowIndex) => {
           return (
-            <tr key={row}>
+            <tr key={`${rowIndex} ${row}`}>
               {row.map((tile, tileIndex) => {
                 return(
                   <td key={`${rowIndex}-${tileIndex}`} data-row={rowIndex} data-col={tileIndex} data-coord={`${rowIndex}-${tileIndex}`} className="unopened" onClick={handleLeftClick} onContextMenu={handleRightClick}>
-                    {tile !== 0 && tile !== 'X' && tile}
                   </td>
                 );
               })}

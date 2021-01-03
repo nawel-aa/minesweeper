@@ -21,6 +21,10 @@ td.mine {
   background-image: url('img/mine.png');
   background-size: 80% auto;
 }
+
+td.mine-clicked {
+  background-color: red;
+}
 /* td.mine-neighbour-1 {
   background-image: url('img/1.svg');
 }
@@ -51,6 +55,7 @@ table {
 }
 
 table td {
+  padding: 0;
   width: 40px;
   height: 40px;
   vertical-align: center;

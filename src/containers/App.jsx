@@ -10,6 +10,7 @@ import Grid from '../components/Grid';
 
 // TODO:
 // Add an option to pick the size of the grid.
+// Add a timer.
 
 // TODO:
 // Handle winning and losing.
@@ -125,10 +126,12 @@ const openTile = (grid, row, col) => {
     return;
   }
 
-  if (grid[row][col] >= 0) {
+  if (grid[row][col] > 0) {
     tile.className = 'opened';
+    tile.textContent = grid[row][col];
   }
   if (grid[row][col] === 0) {
+    tile.className = 'opened';
     clickSurroundingTiles(grid, row, col);
   }
 }
@@ -156,10 +159,11 @@ const clickSurroundingTiles = (grid, row, col) => {
 const App = () => {
   const [level, setLevel] = useState('beginner');
   const [grid, setGrid] = useState(initGrid({ tiles: 81, mines: 10, rows: 9 }));
+  const [stateOfTheGame, setStateOfTheGame] = useState('paused');
 
   // Left click logic
   // => If it's a mine, you lose.
-  // => If it's a number, the tile opens.
+  // => If it's a number, the tile opens and the number is displayed.
   // => If it's an empty tile, the tile and it's surrounding tiles open.
   const leftClickTile = (tile) => {
     const row = parseInt(tile.dataset.row);
@@ -167,12 +171,30 @@ const App = () => {
     const value = grid[row][col];
     
     if (value === 'X') {
-      tile.className = 'mine opened';
+      setStateOfTheGame('lost');
+      const mineTiles = [];
+
+      // Open all mines
+      grid.forEach((row, rowIndex) => {
+        row.forEach((tile, tileIndex) => {
+          if (tile === 'X') {
+            const mineElement = document.querySelector(`[data-coord="${rowIndex}-${tileIndex}"]`);
+            mineTiles.push(mineElement);
+          }
+        })
+      })
+      mineTiles.forEach(mineTile => {
+        mineTile.className = 'opened mine';
+      });
+
+      // Highlight mine clicked
+      tile.classList.add('mine-clicked');
     } else if (value === 0) {
       tile.className = 'opened';
       clickSurroundingTiles(grid, row, col);
     } else {
       tile.className = 'opened';
+      tile.textContent = value;
     }
   }
 

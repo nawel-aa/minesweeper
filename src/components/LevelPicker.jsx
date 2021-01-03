@@ -8,12 +8,9 @@ const LevelPicker = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const inputs = event.target.querySelectorAll('input[name="level"]');
-    const level = Array.from(inputs).find(input => input.checked).value;
+    props.setLevel(levelChecked);
 
-    props.setLevel(level);
-
-    switch (level) {
+    switch (levelChecked) {
       case 'intermediate':
         props.setGrid(props.initGrid({tiles: 256, mines: 40, rows: 16}));
         break;
@@ -26,7 +23,7 @@ const LevelPicker = (props) => {
     }
   }
 
-  const handleChange = (event) => {
+  const checkLevel = (event) => {
     setLevelChecked(event.target.value);
   }
 
@@ -34,13 +31,13 @@ const LevelPicker = (props) => {
     <div>
       <h2>Level</h2>
       <form onSubmit={handleSubmit}>
-        <input type="radio" name="level" value="beginner" id="beginner" checked={levelChecked === 'beginner'} onChange={handleChange}/>
+        <input type="radio" name="level" value="beginner" id="beginner" checked={levelChecked === 'beginner'} onChange={checkLevel}/>
         <label htmlFor="beginner">Beginner</label>
 
-        <input type="radio" name="level" value="intermediate" id="intermediate" checked={levelChecked === 'intermediate'} onChange={handleChange}/>
+        <input type="radio" name="level" value="intermediate" id="intermediate" checked={levelChecked === 'intermediate'} onChange={checkLevel}/>
         <label htmlFor="intermediate">Intermediate</label>
 
-        <input type="radio" name="level" value="expert" id="expert" checked={levelChecked === 'expert'} onChange={handleChange}/>
+        <input type="radio" name="level" value="expert" id="expert" checked={levelChecked === 'expert'} onChange={checkLevel}/>
         <label htmlFor="expert">Expert</label>
 
         <button>Restart the game</button>
