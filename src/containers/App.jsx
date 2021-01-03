@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import LevelPicker from '../components/LevelPicker';
 import Grid from '../components/Grid';
 
@@ -8,16 +8,11 @@ import Grid from '../components/Grid';
 // => Expert has 99 mines, 16x30 grid
 // => For personalized grid, (X-1)(Y-1) mines
 
-// TODO: 
-// On right click on a tile:
-// => If it has the class "opened", do nothing.
-// => If it has the class "flagged", remove it and add the class "question".
-// => If it has the class "question", remove it.
-// => Else, add the class "flagged".
+// TODO:
+// Add an option to pick the size of the grid.
 
 // TODO:
-// Refresh the grid that has already been played when the level changes.
-// Add an option to pick the size of the grid.
+// Handle winning and losing.
 
 // TODO:
 // Styling.
@@ -105,7 +100,7 @@ const initGrid = ({ tiles, mines, rows }) => {
   for (let i = 0; i < mines; i += 1) {
     tilesArray.push('X');
   }
-
+  
   shuffle(tilesArray);
 
   const grid = [];
@@ -113,7 +108,7 @@ const initGrid = ({ tiles, mines, rows }) => {
 
   // Cut the array into rows.
   for (let i = 1; i <= rows; i += 1) {
-    const rowEndIndex = (i * tilesPerRow) - 1;
+    const rowEndIndex = i * tilesPerRow;
     const rowBeginIndex = (i - 1) * tilesPerRow;
     grid.push(tilesArray.slice(rowBeginIndex, rowEndIndex));
   }
@@ -122,70 +117,45 @@ const initGrid = ({ tiles, mines, rows }) => {
   return countMinesNextToTiles(grid);
 };
 
+const openTile = (grid, row, col) => {
+  const tile = document.querySelector(`[data-coord="${row}-${col}"]`);
+
+  // Breaks the loop if the tile has already been opened
+  if (tile && tile.classList.contains('opened')) {
+    return;
+  }
+
+  if (grid[row][col] >= 0) {
+    tile.className = 'opened';
+  }
+  if (grid[row][col] === 0) {
+    clickSurroundingTiles(grid, row, col);
+  }
+}
+
+const clickSurroundingTiles = (grid, row, col) => {
+  // On the same row
+  openTile(grid, row, col + 1);
+  openTile(grid, row, col - 1);
+
+  // On the top row
+  if (row > 0) {
+    openTile(grid, row - 1, col);
+    openTile(grid, row - 1, col + 1);
+    openTile(grid, row - 1, col - 1);
+  }
+
+  // On the row below
+  if (row < grid.length - 1) {
+    openTile(grid, row + 1, col);
+    openTile(grid, row + 1, col + 1);
+    openTile(grid, row + 1, col - 1);
+  }
+}
+
 const App = () => {
-  const [mines, setMines] = useState(10);
-  const [tiles, setTiles] = useState(81);
   const [level, setLevel] = useState('beginner');
-  const [rows, setRows] = useState(9);
-  const [grid, setGrid] = useState(initGrid({tiles, mines, rows}));
-
-  useEffect(() => {
-    switch (level) {
-      case 'intermediate':
-        setMines(40);
-        setTiles(256);
-        setRows(16);
-        break;
-      case 'expert':
-        setMines(99);
-        setTiles(480);
-        setRows(16);
-        break;
-      default:
-        setMines(10);
-        setTiles(81);
-        setRows(9);
-        break;
-    }
-
-    setGrid(initGrid({tiles, mines, rows}));
-  }, [tiles, mines, rows, level])
-
-  const openTile = (row, col) => {
-    const tile = document.querySelector(`[data-coord="${row}-${col}"]`);
-
-    // Breaks the loop if the tile has already been opened
-    if (tile && tile.classList.contains('opened')) {
-      return;
-    }
-
-    if (grid[row][col] >= 0) {
-      tile.className = 'opened';
-    }
-    if (grid[row][col] === 0) {
-      clickSurroundingTiles(row, col);
-    }
-  }
-
-  const clickSurroundingTiles = (row, col) => {
-    // On the same row
-    openTile(row, col + 1);
-    openTile(row, col - 1);
-
-    // On the top row
-    if (row > 0) {
-      openTile(row - 1, col);
-      openTile(row - 1, col + 1);
-      openTile(row - 1, col - 1);
-    }
-
-    // On the row below
-    if (row < grid.length - 1) {
-      openTile(row + 1, col);
-      openTile(row + 1, col + 1);
-      openTile(row + 1, col - 1);
-    }
-  }
+  const [grid, setGrid] = useState(initGrid({ tiles: 81, mines: 10, rows: 9 }));
 
   const leftClickTile = (tile) => {
     const row = parseInt(tile.dataset.row);
@@ -196,21 +166,30 @@ const App = () => {
       tile.className = 'mine opened';
     } else if (value === 0) {
       tile.className = 'opened';
-      clickSurroundingTiles(row, col);
+      clickSurroundingTiles(grid, row, col);
     } else {
       tile.className = 'opened';
     }
   }
-  
+
+  // On right click on a tile:
+  // => If it has the class "opened", do nothing.
+  // => If it has the class "flagged", remove it and add the class "question".
+  // => If it has the class "question", remove it.
+  // => Else, add the class "flagged".
+  const rightClickTile = (tile) => {
+    console.log(tile);
+  }
+
   return (
     <div>
       <h1>Minesweeper</h1>
 
       {/* Level picker */}
-      <LevelPicker level={level} setLevel={setLevel}/>
+      <LevelPicker setGrid={setGrid} initGrid={initGrid} setLevel={setLevel} level={level} />
 
       {/* Grid */}
-      <Grid grid={grid} leftClickTile={leftClickTile} />
+      <Grid grid={grid} leftClickTile={leftClickTile} rightClickTile={rightClickTile} />
     </div>
   );
 }

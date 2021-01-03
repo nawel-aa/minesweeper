@@ -8,6 +8,7 @@ const Grid = (props) => {
   
   const handleRightClick = (event) => {
     event.preventDefault();
+    props.rightClickTile(event.target);
   }
 
   return (
@@ -15,7 +16,7 @@ const Grid = (props) => {
       <tbody>
         {props.grid.map((row, rowIndex) => {
           return (
-            <tr key={rowIndex}>
+            <tr key={row}>
               {row.map((tile, tileIndex) => {
                 return(
                   <td key={`${rowIndex}-${tileIndex}`} data-row={rowIndex} data-col={tileIndex} data-coord={`${rowIndex}-${tileIndex}`} className="unopened" onClick={handleLeftClick} onContextMenu={handleRightClick}>

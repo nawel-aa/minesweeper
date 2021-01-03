@@ -12,6 +12,18 @@ const LevelPicker = (props) => {
     const level = Array.from(inputs).find(input => input.checked).value;
 
     props.setLevel(level);
+
+    switch (level) {
+      case 'intermediate':
+        props.setGrid(props.initGrid({tiles: 256, mines: 40, rows: 16}));
+        break;
+      case 'expert':
+        props.setGrid(props.initGrid({tiles: 480, mines: 99, rows: 16}));
+        break;
+      default:
+        props.setGrid(props.initGrid({tiles: 81, mines: 10, rows: 9}));
+        break;
+    }
   }
 
   const handleChange = (event) => {
