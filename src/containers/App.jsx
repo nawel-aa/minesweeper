@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useState } from 'react';
 import LevelPicker from '../components/LevelPicker';
 import Grid from '../components/Grid';
 
@@ -157,6 +157,10 @@ const App = () => {
   const [level, setLevel] = useState('beginner');
   const [grid, setGrid] = useState(initGrid({ tiles: 81, mines: 10, rows: 9 }));
 
+  // Left click logic
+  // => If it's a mine, you lose.
+  // => If it's a number, the tile opens.
+  // => If it's an empty tile, the tile and it's surrounding tiles open.
   const leftClickTile = (tile) => {
     const row = parseInt(tile.dataset.row);
     const col = parseInt(tile.dataset.col);
@@ -172,23 +176,29 @@ const App = () => {
     }
   }
 
-  // On right click on a tile:
-  // => If it has the class "opened", do nothing.
-  // => If it has the class "flagged", remove it and add the class "question".
-  // => If it has the class "question", remove it.
-  // => Else, add the class "flagged".
+  // Right click logic
+  // => First click adds a flag.
+  // => Second click transforms it into a question mark.
+  // => Third click resets it.
   const rightClickTile = (tile) => {
-    console.log(tile);
+    if (tile.classList.contains('opened')) {
+      return;
+    } else if (tile.classList.contains('flagged')) {
+      tile.classList.remove('flagged');
+      tile.classList.add('question');
+    } else if (tile.classList.contains('question')) {
+      tile.classList.remove('question');
+    } else {
+      tile.classList.add('flagged');
+    }
   }
 
   return (
     <div>
       <h1>Minesweeper</h1>
 
-      {/* Level picker */}
       <LevelPicker setGrid={setGrid} initGrid={initGrid} setLevel={setLevel} level={level} />
 
-      {/* Grid */}
       <Grid grid={grid} leftClickTile={leftClickTile} rightClickTile={rightClickTile} />
     </div>
   );
