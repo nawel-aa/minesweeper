@@ -22,9 +22,11 @@ const Dashboard = (props) => {
         break;
       case 'won':
         setMessage('😎');
+        clearInterval(intervalId)
         break;
       case 'lost':
         setMessage('😖');
+        clearInterval(intervalId)
         break;
       default:
         setMessage('😴');
@@ -32,6 +34,7 @@ const Dashboard = (props) => {
         break;
     }
     return (clearInterval(intervalId));
+    // eslint-disable-next-line
   }, [stateOfTheGame])
 
   useEffect(() => {

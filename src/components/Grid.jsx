@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const openTile = (grid, row, col) => {
   const tile = document.querySelector(`[data-coord="${row}-${col}"]`);
@@ -38,33 +38,17 @@ const clickSurroundingTiles = (grid, row, col) => {
   }
 }
 
-const Grid = (props) => {
-  const { stateOfTheGame, setStateOfTheGame, grid } = props;
-
-  // Left click logic
-  // => If it's a mine, you lose.
-  // => If it's a number, the tile opens and the number is displayed.
-  // => If it's an empty tile, the tile and it's surrounding tiles open.
-  const handleLeftClick = (event) => {
-    switch (stateOfTheGame) {
-      case 'lost':
-        return;
-      case 'won':
-        return;
-      case 'notStarted':
-        setStateOfTheGame('running');
-        break;
-      // no default
-    }
-
-    const tile = event.target;
+const isGameWon = (grid) => {
+  // If only mines are unopen, game is won.
+  const unopenTiles = Array.from(document.querySelectorAll('.unopen'));
+  return unopenTiles.every(tile => {
     const row = parseInt(tile.dataset.row);
     const col = parseInt(tile.dataset.col);
-    const value = grid[row][col];
-    
-    // If the tile is a mine
-    if (value === 'X') {
-      setStateOfTheGame('lost');
+    return grid[row][col] === 'X';
+  });
+}
+
+const openAllMines = (grid) => {
       const mineTiles = [];
 
       // Open all mines
@@ -79,32 +63,72 @@ const Grid = (props) => {
       mineTiles.forEach(mineTile => {
         mineTile.className = 'open mine';
       });
+}
 
-      // Highlight mine clicked
+const removeClickedMine = (grid, row, col) => {
+  // Switch the mine with the first empty tile of the grid.
+  let i = 0;
+  let value = 'X';
+  let updatedGrid = grid;
+  while (value === 'X') {
+    const emptyTileIndex = updatedGrid[i].findIndex(tile => tile === 0);
+    if (emptyTileIndex !== -1) {
+      value = 0;
+      updatedGrid[row][col] = 0;
+      updatedGrid[i][emptyTileIndex] = 'X';
+    }
+    i += 1;
+  }
+  return updatedGrid;
+}
+
+const Grid = (props) => {
+  const { stateOfTheGame, setStateOfTheGame, grid, countMinesNextToTiles, setGrid, firstClickMine, setFirstClickMine } = props;
+
+  // Left click logic
+  // => If it's a mine, you lose.
+  // => If it's a number, the tile opens and the number is displayed.
+  // => If it's an empty tile, the tile and it's surrounding tiles open.
+  const handleLeftClick = (event) => {
+    if (stateOfTheGame === 'won' || stateOfTheGame === 'lost') {
+      return;
+    }
+
+    const tile = event.target;
+    const row = parseInt(tile.dataset.row);
+    const col = parseInt(tile.dataset.col);
+    let value = grid[row][col];
+
+    if (stateOfTheGame === 'notStarted') {
+      setStateOfTheGame('running');
+
+      if (value === 'X') {
+        const updatedGrid = removeClickedMine(grid, row, col);
+        setGrid(countMinesNextToTiles(updatedGrid));
+        setFirstClickMine({ row, col });
+        return;
+      }
+    }
+
+    // If the tile is a mine
+    if (value === 'X') {
+      setStateOfTheGame('lost');
+      openAllMines(grid, tile);
       tile.classList.add('mine-clicked');
 
     // If the tile is empty
     } else if (value === 0) {
       tile.className = 'open';
       clickSurroundingTiles(grid, row, col);
-
-    // If the tile is a number
+      
+      // If the tile is a number
     } else {
       tile.className = 'open';
       tile.textContent = value;
     }
 
-    // If only mines are unopen, game is won.
-    const unopenTiles = Array.from(document.querySelectorAll('.unopen'));
-    const won = unopenTiles.every(tile => {
-      const row = parseInt(tile.dataset.row);
-      const col = parseInt(tile.dataset.col);
-      return grid[row][col] === 'X';
-    });
-    if (won) {
-      setStateOfTheGame('won');
-      return;
-    }
+    // Check if game is won
+    isGameWon(grid) && setStateOfTheGame('won');
   }
 
   // Right click logic
@@ -114,16 +138,11 @@ const Grid = (props) => {
   const handleRightClick = (event) => {
     event.preventDefault();
 
-    switch (stateOfTheGame) {
-      case 'lost':
-        return;
-      case 'won':
-        return;
-      case 'notStarted':
-        setStateOfTheGame('running');
-        break;
-      // no default
+    if (stateOfTheGame === 'lost' || stateOfTheGame === 'won') {
+      return;
     }
+
+    stateOfTheGame === 'notStarted' && setStateOfTheGame('running');
     
     const tile = event.target;
     if (tile.classList.contains('open')) {
@@ -138,15 +157,23 @@ const Grid = (props) => {
     }
   }
 
+  // If the first click was a mine, open the tile after re-render
+  useEffect(() => {
+    if (firstClickMine) {
+      openTile(grid, firstClickMine.row, firstClickMine.col);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstClickMine])
+  
   return (
     <table>
       <tbody>
         {props.grid.map((row, rowIndex) => {
           return (
-            <tr key={`${rowIndex} ${row}`}>
-              {row.map((tile, tileIndex) => {
+            <tr key={`${rowIndex}-${row}`}>
+              {row.map((_tile, tileIndex) => {
                 return(
-                  <td key={`${rowIndex}-${tileIndex}`} data-row={rowIndex} data-col={tileIndex} data-coord={`${rowIndex}-${tileIndex}`} className="unopen" onClick={handleLeftClick} onContextMenu={handleRightClick}>
+                  <td key={`${rowIndex}-${tileIndex}`} data-row={rowIndex} data-col={tileIndex} data-coord={`${rowIndex}-${tileIndex}`} className='unopen' onClick={handleLeftClick} onContextMenu={handleRightClick}>
                   </td>
                 );
               })}
