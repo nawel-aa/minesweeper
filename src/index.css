@@ -76,3 +76,7 @@ table td {
   display: flex;
   justify-content: space-between;
 }
+
+.hidden {
+  display: none;
+}

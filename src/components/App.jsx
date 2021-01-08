@@ -4,9 +4,6 @@ import Dashboard from './Dashboard';
 import Grid from './Grid';
 
 // TODO:
-// Add an option to pick the size of the grid.
-
-// TODO:
 // When lost, if a flag was misplaced, show a mine with a X on top of it.
 
 // TODO:
