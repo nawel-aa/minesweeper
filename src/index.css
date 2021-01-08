@@ -6,6 +6,7 @@ td.unopen {
   border-bottom: 3px solid #757575;
   cursor: pointer;
 }
+
 td.open {
   border: 1px solid #757575;
   padding: 2px;
@@ -25,6 +26,12 @@ td.mine {
 td.mine-clicked {
   background-color: red;
 }
+
+td.wrong-flag {
+  background-image: url('img/wrong-flag.png');
+  background-size: 80% auto;
+}
+
 /* td.mine-neighbour-1 {
   background-image: url('img/1.svg');
 }

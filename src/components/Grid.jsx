@@ -54,9 +54,13 @@ const openAllMines = (grid) => {
       // Open all mines
       grid.forEach((row, rowIndex) => {
         row.forEach((tile, tileIndex) => {
+          const mineElement = document.querySelector(`[data-coord="${rowIndex}-${tileIndex}"]`);
+
           if (tile === 'X') {
-            const mineElement = document.querySelector(`[data-coord="${rowIndex}-${tileIndex}"]`);
             mineTiles.push(mineElement);
+            // Highlight flagged tiles that didn't have a mine.
+          } else if (mineElement.className.includes('flagged')) {
+            mineElement.className = 'open wrong-flag';
           }
         })
       })

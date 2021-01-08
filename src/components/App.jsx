@@ -4,11 +4,7 @@ import Dashboard from './Dashboard';
 import Grid from './Grid';
 
 // TODO:
-// When lost, if a flag was misplaced, show a mine with a X on top of it.
-
-// TODO:
 // Styling.
-
 
 // Uses the Fisher-Yates algorithm to shuffle the array
 const shuffle = (array) => {
