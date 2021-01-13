@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/minesweeper/static/css/main.585378e1.chunk.css",
+    "main.js": "/minesweeper/static/js/main.6c8113e6.chunk.js",
+    "main.js.map": "/minesweeper/static/js/main.6c8113e6.chunk.js.map",
+    "runtime-main.js": "/minesweeper/static/js/runtime-main.0514e91f.js",
+    "runtime-main.js.map": "/minesweeper/static/js/runtime-main.0514e91f.js.map",
+    "static/js/2.9b1b361e.chunk.js": "/minesweeper/static/js/2.9b1b361e.chunk.js",
+    "static/js/2.9b1b361e.chunk.js.map": "/minesweeper/static/js/2.9b1b361e.chunk.js.map",
+    "static/js/3.7a88aff5.chunk.js": "/minesweeper/static/js/3.7a88aff5.chunk.js",
+    "static/js/3.7a88aff5.chunk.js.map": "/minesweeper/static/js/3.7a88aff5.chunk.js.map",
+    "index.html": "/minesweeper/index.html",
+    "static/css/main.585378e1.chunk.css.map": "/minesweeper/static/css/main.585378e1.chunk.css.map",
+    "static/js/2.9b1b361e.chunk.js.LICENSE.txt": "/minesweeper/static/js/2.9b1b361e.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/minesweeper/static/media/question.79812929.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0514e91f.js",
+    "static/js/2.9b1b361e.chunk.js",
+    "static/css/main.585378e1.chunk.css",
+    "static/js/main.6c8113e6.chunk.js"
+  ]
+}
