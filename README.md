@@ -1,5 +1,7 @@
 # Simple minesweeper
 
+🕹 [Try it](https://nawel-aa.github.io/minesweeper/)
+
 Features:
 * MVP for a minesweeper
   * Generation of a grid with mines
